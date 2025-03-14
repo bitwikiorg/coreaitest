@@ -1,0 +1,52 @@
+
+/* System Status Indicators */
+.system-status {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #666;
+  position: relative;
+}
+
+.status-dot::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background-color: var(--header-bg);
+  color: var(--text-color);
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 100;
+}
+
+.status-dot:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.status-dot.active {
+  background-color: var(--accent-color);
+  box-shadow: 0 0 5px var(--glow);
+}
+
+.status-dot.warning {
+  background-color: var(--warning-color);
+}
+
+.status-dot.error {
+  background-color: var(--error-color);
+}

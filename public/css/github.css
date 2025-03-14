@@ -1,0 +1,362 @@
+/* GitHub Integration Dashboard Styles */
+.github-content {
+    padding: 20px;
+    color: #ddd;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.status-section {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.status-value {
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.status-value.active {
+    background-color: #285c28;
+    color: #7fff7f;
+}
+
+.status-value.inactive {
+    background-color: #5c2828;
+    color: #ff7f7f;
+}
+
+.status-value.checking {
+    background-color: #5c5c28;
+    color: #ffff7f;
+}
+
+.status-details {
+    font-family: monospace;
+    color: #999;
+    padding: 10px;
+    border-left: 3px solid #444;
+    margin-bottom: 15px;
+}
+
+.config-section {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.config-header {
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+.config-description {
+    font-style: italic;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.repo-settings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.setting-item label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.setting-item input {
+    padding: 8px;
+    background-color: #2a2a2a;
+    color: #ddd;
+    border: 1px solid #444;
+    font-family: monospace;
+}
+
+.action-btn {
+    background-color: #2a2a2a;
+    color: #7f7fff;
+    border: 1px solid #7f7fff;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #3a3a3a;
+}
+
+.activity-section {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.activity-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.activity-item {
+    margin-bottom: 8px;
+    border-left: 3px solid #444;
+    padding-left: 8px;
+}
+
+.activity-time {
+    color: #888;
+    margin-right: 8px;
+    font-size: 0.8em;
+}
+
+.upload-result {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.upload-success {
+    background-color: rgba(40, 167, 69, 0.2);
+    border: 1px solid #28a745;
+    color: #28a745;
+}
+
+.upload-error {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+/* Custom file upload section */
+.custom-upload-section {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.custom-upload-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #9370DB; /* Purple color */
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #9370DB; /* Purple color */
+}
+
+.input-group input, 
+.input-group textarea {
+    width: 100%;
+    padding: 8px;
+    background-color: #2a2a2a;
+    color: #ddd;
+    border: 1px solid #444;
+    font-family: monospace;
+}
+
+.input-group small {
+    display: block;
+    color: #999;
+    font-size: 0.8em;
+    margin-top: 3px;
+}
+
+.input-group textarea {
+    min-height: 100px;
+
+/* Custom Upload Section Styles */
+.custom-upload-section {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border: 1px solid #333;
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #00ff9d;
+}
+
+.input-group input[type="text"],
+.input-group textarea {
+    width: 100%;
+    padding: 8px;
+    background-color: #111;
+    border: 1px solid #444;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.input-group small {
+    display: block;
+    margin-top: 5px;
+    color: #888;
+}
+
+.upload-result {
+    margin-top: 10px;
+    padding: 10px;
+    border-left: 3px solid #444;
+    color: #00ff9d;
+}
+
+.upload-result a {
+    color: #00aeff;
+    text-decoration: none;
+}
+
+.upload-result a:hover {
+    text-decoration: underline;
+}
+
+    resize: vertical;
+}
+
+.action-button {
+    background-color: #614685; /* Purple color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    background-color: #7d5ba6; /* Lighter purple */
+}
+
+.actions-section .action-btn {
+    background-color: #614685; /* Purple color */
+    color: white;
+}
+
+.actions-section .action-btn:hover {
+    background-color: #7d5ba6; /* Lighter purple */
+}
+
+.upload-status {
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.timestamp {
+    color: #999;
+    font-family: monospace;
+    margin-right: 10px;
+    min-width: 180px;
+}
+
+.activity-text {
+    font-family: monospace;
+}
+
+.actions-section {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+}
+
+.action-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-description {
+    font-style: italic;
+    color: #999;
+}
+
+.ascii-separator {
+    font-family: monospace;
+    color: #7f7fff;
+    margin: 20px 0;
+    white-space: pre;
+}
+
+.action-button:hover {
+    background-color: #0056b3;
+}
+
+/* File Upload Form Styles */
+.upload-form {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-family: monospace;
+}

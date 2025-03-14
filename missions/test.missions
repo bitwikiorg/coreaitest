@@ -1,0 +1,6 @@
+
+# Test research missions (one query per line)
+# Format: query|depth|breadth (depth and breadth are optional)
+
+artificial intelligence trends|2|3
+quantum computing developments

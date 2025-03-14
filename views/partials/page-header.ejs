@@ -1,0 +1,12 @@
+
+<div class="main-header">
+    <div class="title"><%= title %></div>
+    <button id="toggle-sidebar" class="help-button">HELP</button>
+</div>
+
+<!-- Add status indicators CSS -->
+<% if (!locals.statusIndicatorsLoaded) { %>
+<link rel="stylesheet" href="/css/status-indicators.css">
+<script src="/js/system-status.js" defer></script>
+<% locals.statusIndicatorsLoaded = true; %>
+<% } %>

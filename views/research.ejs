@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE AI - Research Database</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('partials/navbar', {active: 'research'}); %>
+
+    <div class="container">
+        <div class="terminal-container">
+            <div class="main-header">
+                <div class="title">RESEARCH RESULTS v1.0</div>
+                <button id="toggle-sidebar" class="help-button">HELP</button>
+            </div>
+
+            <div class="split-layout">
+                <div class="main-content">
+                    <div class="content-area">
+                        <div class="research-header">
+                            <h1>[ RESEARCH RESULTS ]</h1>
+                        </div>
+
+                        <div class="research-list" id="research-list">
+                            <!-- Research items will be populated here -->
+                            <div class="no-research-message">
+                                [ NO RESULT ENTRIES FOUND - USE TERMINAL TO CREATE NEW RESEARCH ]
+                            </div>
+                        </div>
+
+                        <!-- Research details view -->
+                        <div class="research-details" id="research-details" style="display: none;">
+                            <div class="details-header">
+                                <button class="btn" id="back-to-list">← BACK TO LIST</button>
+                                <h2 id="research-detail-title">Research Details</h2>
+                            </div>
+                            <div class="details-content">
+                                <div class="detail-section">
+                                    <h3 class="detail-title">Summary</h3>
+                                    <div id="research-summary" class="detail-content"></div>
+                                </div>
+                                <div class="detail-section">
+                                    <h3 class="detail-title">Key Learnings</h3>
+                                    <ul id="research-learnings" class="detail-content"></ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h3 class="detail-title">Sources</h3>
+                                    <ul id="research-sources" class="detail-content"></ul>
+                                </div>
+                            </div>
+                            <div class="details-actions">
+                                <button class="btn btn-primary" id="rerun-research">RERUN RESEARCH</button>
+                            </div>
+                        </div>
+
+                        <!-- Progress tracking -->
+                        <div class="progress-container" id="progress-container" style="display: none;">
+                            <div class="progress-header">
+                                <div class="progress-title" id="progress-title">Researching...</div>
+                                <div class="progress-stats" id="progress-stats">0%</div>
+                            </div>
+                            <div class="progress-bar-outer">
+                                <div class="progress-bar-inner" id="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="progress-details" id="progress-details"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <div class="progress-bar">
+                    <div id="status-progress-fill" class="progress-bar-inner"></div>
+                </div>
+                <div id="status-text">Ready</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/research.js"></script>
+    <script src="/js/global.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+
+/* GitHub Section Styles for Admin Page */
+.status-section {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-details {
+    font-family: monospace;
+    color: #999;
+    padding: 10px;
+    border-left: 3px solid #444;
+    margin-bottom: 15px;
+}
+
+.actions-section {
+    margin-top: 15px;
+}
+
+.action-group {
+    margin-bottom: 15px;
+}
+
+.action-description {
+    font-size: 0.9em;
+    color: #999;
+    margin-top: 5px;
+}
+
+.custom-upload-section {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.help-text {
+    font-size: 0.8em;
+    color: #999;
+    margin-top: 3px;
+}
+
+.activity-section {
+    margin-top: 15px;
+}
+
+.activity-list {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.activity-item {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #333;
+}
+
+.timestamp {
+    color: #999;
+    margin-right: 10px;
+}
+
+.activity-text {
+    color: #ccc;
+}
+
+.upload-result {
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.upload-result .success {
+    color: #7fff7f;
+}
+
+.upload-result .error {
+    color: #ff7f7f;
+}
+

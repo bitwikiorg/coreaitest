@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE AI - GitHub Management</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/terminal.css">
+    <link rel="stylesheet" href="/css/github.css">
+</head>
+<body>
+    <%- include('partials/navbar', {active: 'github'}); %>
+
+    <div class="container">
+        <div class="terminal-container">
+
+            <div class="main-header">
+                <div class="title">GITHUB INTEGRATION v1.0</div>
+                <button id="toggle-sidebar" class="help-button">HELP</button>
+            </div>
+
+            <div class="github-content">
+                <!-- Connection Status -->
+                <div class="config-section">
+                    <div class="config-header">[ CONNECTION STATUS ]</div>
+                </div>
+
+                <div class="status-section">
+                    <div class="status-indicator">
+                        <span class="status-label">GITHUB API:</span>
+                        <span class="status-value" id="github-api-status">CHECKING...</span>
+                    </div>
+                    <div class="status-details" id="github-status-details">
+                        Verifying connection to GitHub...
+                    </div>
+                    <button class="action-btn" id="verify-connection">VERIFY CONNECTION</button>
+                </div>
+
+                <!-- Repository Configuration -->
+                <div class="config-section">
+                    <div class="config-header">[ REPOSITORY SETTINGS ]</div>
+                </div>
+
+                <div class="config-section">
+                    <div class="config-header">[ RESEARCH REPOSITORY ]</div>
+                    <div class="config-description">Repository where research results are stored</div>
+
+                    <div class="repo-settings">
+                        <div class="setting-item">
+                            <label>OWNER/ORG:</label>
+                            <input type="text" id="research-repo-owner" placeholder="GitHub username or organization">
+                        </div>
+                        <div class="setting-item">
+                            <label>REPOSITORY:</label>
+                            <input type="text" id="research-repo-name" placeholder="e.g., research-results">
+                        </div>
+                        <div class="setting-item">
+                            <label>BRANCH:</label>
+                            <input type="text" id="research-repo-branch" placeholder="main">
+                        </div>
+                        <div class="setting-item">
+                            <label>PATH:</label>
+                            <input type="text" id="research-repo-path" placeholder="research">
+                        </div>
+                        <button class="action-btn" id="save-research-repo">SAVE SETTINGS</button>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="config-section">
+                    <div class="config-header">[ RECENT ACTIVITY ]</div>
+                </div>
+
+                <div class="activity-section">
+                    <div class="activity-list" id="github-activity">
+                        <div class="activity-item">
+                            <span class="timestamp">YYYY-MM-DD HH:MM:SS</span>
+                            <span class="activity-text">Waiting for activity data...</span>
+                        </div>
+                    </div>
+                    <button class="action-btn" id="refresh-activity">REFRESH ACTIVITY</button>
+                </div>
+
+                <!-- Manual Actions -->
+                <div class="config-section">
+                    <div class="config-header">[ MANUAL ACTIONS ]</div>
+                </div>
+
+                <div class="actions-section">
+                    <div class="action-group">
+                        <button class="action-btn" id="sync-all-research">SYNC ALL RESEARCH</button>
+                        <div class="action-description">Bidirectional sync - first pull from GitHub, then push local files (full synchronization)</div>
+                    </div>
+                    <div class="action-group">
+                        <button class="action-btn" id="upload-research-btn">UPLOAD RESEARCH DOCUMENTS</button>
+                        <div class="action-description">Upload local research documents to the GitHub repository (push only)</div>
+                    </div>
+                    <div class="action-group">
+                        <button class="action-btn" id="test-github-upload">TEST UPLOAD</button>
+                        <div class="action-description">Create a test file to verify GitHub connectivity</div>
+                    </div>
+                    <h3>Custom File Upload</h3>
+                    <div class="custom-upload-section">
+                        <div class="input-group">
+                            <label for="file-path-input">File Path:</label>
+                            <input type="text" id="file-path-input" placeholder="e.g., research/my-notes.md">
+                            <small>Include the full path where the file should be saved in the repository</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="commit-message-input">Commit Message:</label>
+                            <input type="text" id="commit-message-input" placeholder="Add custom notes">
+                        </div>
+                        <div class="input-group">
+                            <label for="file-content-input">Content:</label>
+                            <textarea id="file-content-input" rows="8" placeholder="# My Notes&#10;&#10;Enter your content here..."></textarea>
+                        </div>
+                        <button id="upload-file-btn" class="action-btn">Upload File</button>
+                        <div id="upload-result" class="upload-result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/github.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE AI Terminal</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/terminal.css">
+</head>
+<body>
+    <%- include('partials/navbar', {active: 'terminal'}); %>
+    <div class="container">
+        <div class="terminal-container">
+            <div class="sidebar hidden">
+                <div class="sidebar-header">
+                    <h3>CORE AI COMMANDS</h3>
+                    <button id="close-sidebar">×</button>
+                </div>
+                <div class="sidebar-content">
+                    <div class="command-group">
+                            <div class="command-group">
+                                <h4>GITHUB COMMANDS</h4>
+                                <ul>
+                                    <li><code>github:status</code> - Check GitHub connection</li>
+                                    <li><code>github:sync</code> - Sync research to GitHub</li>
+                                    <li><code>github:test</code> - Test GitHub connection</li>
+                                </ul>
+                            </div>
+
+                        <h4>RESEARCH COMMANDS</h4>
+                        <ul>
+                            <li><code>research "query"</code> - Research a topic</li>
+                            <li><code>depth 1-5</code> - Set research depth</li>
+                            <li><code>breadth 2-10</code> - Set research breadth</li>
+                        </ul>
+                    </div>
+                    <div class="command-group">
+                        <h4>SYSTEM COMMANDS</h4>
+                        <ul>
+                            <li><code>help</code> - Show this help menu</li>
+                            <li><code>clear</code> - Clear terminal</li>
+                            <li><code>status</code> - Check system status</li>
+                            <li><code>models</code> - Show available AI models</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <%- include('partials/page-header', {title: 'CORE AI TERMINAL v1.0'}); %>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="terminal-tab">
+                    <div class="terminal-window">
+                        <div id="output" class="terminal-output">
+                            <div class="ascii-logo">
+<pre>
+ ██████╗ ██████╗ ██████╗ ███████╗     █████╗ ██╗
+██╔════╝██╔═══██╗██╔══██╗██╔════╝    ██╔══██╗██║
+██║     ██║   ██║██████╔╝█████╗      ███████║██║
+██║     ██║   ██║██╔══██╗██╔══╝      ██╔══██║██║
+╚██████╗╚██████╔╝██║  ██║███████╗    ██║  ██║██║
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═╝  ╚═╝╚═╝
+</pre>
+                            </div>
+                            <div class="deep-research">
+                                ============ DEEP RESEARCH PRIVACY ============
+                            </div>
+                            <div class="boot-sequence">
+                                <p>[SYSTEM] Initializing CORE AI subsystems...</p>
+                                <p>[SYSTEM] Loading research modules...</p>
+                                <p>[SYSTEM] Connecting to Venice.ai...</p>
+                                <p>[SYSTEM] Connecting to Brave Search...</p>
+                                <p>[SYSTEM] All systems operational.</p>
+                                <p>[SYSTEM] CORE AI terminal ready. Type <span class="cmd-highlight">help</span> for commands.</p>
+                            </div>
+                        </div>
+                        <div class="terminal-input-line">
+                            <span class="prompt">&gt;</span>
+                            <input type="text" id="command-input" autocomplete="off" autofocus>
+                        </div>
+                    </div>
+                    <div class="status-bar">
+                        <div class="progress-bar">
+                            <div id="progress-fill"></div>
+                        </div>
+                        <div id="progress-text">Ready</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/terminal.js"></script>
+</body>
+</html>

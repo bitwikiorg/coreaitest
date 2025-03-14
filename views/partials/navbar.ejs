@@ -1,0 +1,15 @@
+<div class="header">
+    <div class="logo">COREAI Research System</div>
+    <div class="nav">
+        <a href="/" class="tab<% if (active === 'terminal') { %> active<% } %>">[TERMINAL]</a>
+        <a href="/research" class="tab<% if (active === 'research') { %> active<% } %>">[RESULTS]</a>
+        <a href="/self" class="tab<% if (active === 'self') { %> active<% } %>">[SELF]</a>
+        <a href="/memory" class="tab<% if (active === 'memory') { %> active<% } %>">[MEMORY]</a>
+        <a href="/admin" class="tab<% if (active === 'admin') { %> active<% } %>">[ADMIN]</a>
+        <div class="system-status">
+            <span id="openai-status" class="status-dot" title="OpenAI API"></span>
+            <span id="github-status" class="status-dot" title="GitHub Integration"></span>
+            <span id="memory-status" class="status-dot" title="Memory System"></span>
+        </div>
+    </div>
+</div>

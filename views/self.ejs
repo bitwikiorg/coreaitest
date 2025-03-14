@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workflow Organizer</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/self.css">
+</head>
+<body>
+    <%- include('partials/navbar', {active: 'self'}); %>
+
+    <div class="self-container">
+        <!-- Collapsible sidebar with modules -->
+        <div class="self-sidebar" id="selfSidebar" style="display: none;">
+            <div class="self-actions">
+                <button id="refreshBtn" class="btn btn-sm">Refresh</button>
+                <button id="initializeBtn" class="btn btn-sm btn-primary">Initialize</button>
+                <button id="createTaskBtn" class="btn btn-sm btn-accent">Create Task</button>
+            </div>
+            <div id="moduleList">
+                <div class="self-module-item">Loading modules...</div>
+            </div>
+        </div>
+
+        <div class="self-main">
+            <div class="main-header">
+                <div class="title">AI WORKFLOW ORGANIZER</div>
+                <div>
+                    <button id="show-help" class="btn btn-sm">Help</button>
+                </div>
+            </div>
+
+            <div class="self-content" id="selfContent">
+                <div class="self-editor" id="selfEditor" style="display: none;">
+                    <div class="self-editor-header">
+                        <span id="currentModulePath">No module selected</span>
+                        <div>
+                            <button id="cancelEditBtn" class="btn btn-sm">Cancel</button>
+                            <button id="saveModuleBtn" class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </div>
+                    <div class="self-editor-body">
+                        <textarea id="moduleEditor" class="editor"></textarea>
+                    </div>
+                </div>
+
+                <div id="welcomeView">
+                    <div class="prompt-management-section">
+                        <h2>System Configuration</h2>
+                        <p>Manage AI system prompts and task scheduling for autonomous operations.</p>
+
+                        <div class="prompt-selector">
+                            <h3>Research AI Prompt</h3>
+                            <div class="prompt-status" id="researchPromptStatus">Using default prompt</div>
+
+                            <div class="prompt-controls">
+                                <select id="researchPromptSelect" class="prompt-select">
+                                    <option value="">Default Prompt</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
+                                <button id="setResearchPromptBtn" class="btn btn-sm">Set Prompt</button>
+                                <button id="viewResearchPromptBtn" class="btn btn-sm">View Current</button>
+                            </div>
+                        </div>
+
+                        <div class="prompt-selector">
+                            <h3>Terminal AI Prompt</h3>
+                            <div class="prompt-status" id="terminalPromptStatus">Using default prompt</div>
+
+                            <div class="prompt-controls">
+                                <select id="terminalPromptSelect" class="prompt-select">
+                                    <option value="">Default Prompt</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
+                                <button id="setTerminalPromptBtn" class="btn btn-sm">Set Prompt</button>
+                                <button id="viewTerminalPromptBtn" class="btn btn-sm">View Current</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-management-section">
+                        <h2>Active Missions</h2>
+                        <p>Manage and monitor autonomous tasks and scheduled operations.</p>
+
+                        <div class="mission-controls-container">
+                            <div class="task-controls">
+                                <button id="openTaskBtn" class="btn btn-primary">New Task</button>
+                                <button id="refreshTasksBtn" class="btn">Refresh Tasks</button>
+                                <div class="scheduler-toggle">
+                                    <button id="startSchedulerBtn" class="btn btn-accent toggle-btn">Start Scheduler</button>
+                                    <span id="schedulerStatus" class="status-badge status-disconnected">Inactive</span>
+                                    <span class="last-run" id="schedulerLastRun">Never run</span>
+                                </div>
+                            </div>
+
+                            <div class="github-integration">
+                                <div class="github-status-display">
+                                    <span>GitHub:</span>
+                                    <span id="githubStatus">
+                                        <span class="status-badge status-disconnected">Disconnected</span>
+                                    </span>
+                                    <button id="checkGithubConnectionBtn" class="btn btn-sm" title="Check GitHub Connection">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                                            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="github-task-controls">
+                                    <button id="syncGithubTasksBtn" class="btn btn-sm" title="Bi-directional Sync with GitHub">Sync</button>
+                                    <button id="pushTasksBtn" class="btn btn-sm" title="Push Local Tasks to GitHub">Push</button>
+                                    <button id="pullTasksBtn" class="btn btn-sm" title="Pull Tasks from GitHub">Pull</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-list-container">
+                            <h3>Task Queue</h3>
+                            <div class="task-filter">
+                                <select id="taskFilterPriority" class="task-filter-select">
+                                    <option value="all">All Priorities</option>
+                                    <option value="high">High Priority</option>
+                                    <option value="medium">Medium Priority</option>
+                                    <option value="low">Low Priority</option>
+                                </select>
+                                <select id="taskFilterStatus" class="task-filter-select">
+                                    <option value="all">All Statuses</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="in progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="failed">Failed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div id="scheduledTaskList" class="task-list">
+                                <div class="empty-state">No scheduled tasks. Create one using "New Task" button.</div>
+                            </div>
+                        </div>
+
+                        <div class="memory-generation-section">
+                            <h3>Memory Management</h3>
+                            <div class="memory-controls">
+                                <button id="generateMemoriesBtn" class="btn">Generate Memories from Logs</button>
+                                <button id="generateResearchBtn" class="btn">Create Research Task</button>
+                                <button id="viewMemoriesBtn" class="btn">View Recent Memories</button>
+                            </div>
+                        </div>
+
+                        <div class="activity-log-section">
+                            <h3>Activity Log</h3>
+                            <div class="self-activities" id="selfActivities">
+                                <div class="self-activity-item">
+                                    <div class="self-activity-text">System initialized</div>
+                                    <div class="self-activity-time">Just now</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modals -->
+                <div id="promptViewModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="promptViewTitle">Current Prompt</h2>
+                        <div class="prompt-view-content">
+                            <pre id="promptViewContent" class="prompt-content"></pre>
+                        </div>
+                        <div class="form-actions">
+                            <button id="closePromptViewBtn" class="btn btn-sm">Close</button>
+                            <button id="editPromptBtn" class="btn btn-sm btn-primary">Edit/Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="promptEditModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="promptEditTitle">Edit Prompt</h2>
+                        <div class="form-group">
+                            <label for="promptType">Prompt Type:</label>
+                            <select id="promptTypeSelect" class="prompt-select">
+                                <option value="research">Research AI</option>
+                                <option value="terminal">Terminal AI</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="promptName">Prompt Name:</label>
+                            <input type="text" id="promptNameInput" class="prompt-input" placeholder="e.g., research_custom_v1" />
+                            <small class="input-help">Will be saved as /prompts/[name].md in GitHub</small>
+                        </div>
+                        <div class="prompt-editor-content">
+                            <textarea id="promptEditContent" class="prompt-editor" rows="20"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button id="cancelEditPromptBtn" class="btn btn-sm">Cancel</button>
+                            <button id="saveNewPromptBtn" class="btn btn-sm btn-primary">Save As New</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity log moved to main content area -->
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>AI Workflow Organizer Help</h2>
+            <div class="help-content">
+                <h3>System Configuration</h3>
+                <p>This section allows you to manage AI system prompts for research and terminal operations.</p>
+                <ul>
+                    <li><strong>Research AI Prompt</strong>: Select and configure the prompt used for research operations.</li>
+                    <li><strong>Terminal AI Prompt</strong>: Select and configure the prompt used for terminal interactions.</li>
+                </ul>
+
+                <h3>Active Workflows</h3>
+                <p>Manage your autonomous research missions and scheduled operations.</p>
+                <ul>
+                    <li><strong>New Task</strong>: Create a new research mission.</li>
+                    <li><strong>Start Scheduler</strong>: Activate the automated task scheduler.</li>
+                    <li><strong>Refresh Tasks</strong>: Update the task list to show current status.</li>
+                </ul>
+
+                <h3>Task Management</h3>
+                <ul>
+                    <li>View task details and status in the task list.</li>
+                    <li>Filter tasks by priority and status.</li>
+                    <li>Execute pending tasks immediately.</li>
+                    <li>Cancel tasks that are no longer needed.</li>
+                    <li>Tasks are saved to your GitHub repository.</li>
+                </ul>
+
+                <h3>Memory Management</h3>
+                <ul>
+                    <li><strong>Generate Memories</strong>: Create memory entries from research logs.</li>
+                    <li><strong>Create Research Task</strong>: Start a new targeted research mission.</li>
+                    <li><strong>View Memories</strong>: See recently generated memory entries.</li>
+                </ul>
+            </div>
+            <div class="form-actions">
+                <button id="closeHelpBtn" class="btn btn-sm">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/self.js"></script>
+
+    <div id="taskModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Create Research Mission</h2>
+            <div class="form-group">
+                <label for="taskDescription">Mission Description:</label>
+                <textarea id="taskDescription" class="task-input" rows="4" placeholder="Enter mission description or a research query like: research &quot;artificial intelligence trends&quot; depth 2 breadth 3"></textarea>
+                <small class="help-text">For research missions, use the format: research "your query" depth X breadth Y</small>
+            </div>
+            <div class="form-group">
+                <label for="taskSchedule">Schedule:</label>
+                <select id="taskSchedule" class="task-input">
+                    <option value="Now">Execute now</option>
+                    <option value="Every 5 minutes">Every 5 minutes</option>
+                    <option value="Hourly">Hourly</option>
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="As needed">As needed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="taskPriority">Priority:</label>
+                <select id="taskPriority" class="task-input">
+                    <option value="High">High</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button id="cancelTaskBtn" class="btn btn-sm">Cancel</button>
+                <button id="createTaskBtn" class="btn btn-sm btn-primary">Create Mission</button>
+                <button id="executeNowBtn" class="btn btn-sm btn-accent">Create & Execute Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const socket = io();
+
+            // DOM elements
+            const moduleList = document.getElementById('moduleList');
+            const selfContent = document.getElementById('selfContent');
+            const selfEditor = document.getElementById('selfEditor');
+            const welcomeView = document.getElementById('welcomeView');
+            const moduleEditor = document.getElementById('moduleEditor');
+            const currentModulePath = document.getElementById('currentModulePath');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const initializeBtn = document.getElementById('initializeBtn');
+            const saveModuleBtn = document.getElementById('saveModuleBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const githubStatus = document.getElementById('githubStatus');
+            const selfActivities = document.getElementById('selfActivities');
+            const toggleSidebarButton = document.getElementById('toggle-sidebar');
+            const sidebar = document.getElementById('selfSidebar');
+            const scheduledTaskList = document.getElementById('scheduledTaskList');
+            const openTaskBtn = document.getElementById('openTaskBtn');
+            const generateMemoriesBtn = document.getElementById('generateMemoriesBtn');
+            const generateResearchBtn = document.getElementById('generateResearchBtn');
+
+            // Task modal elements
+            const taskModal = document.getElementById('taskModal');
+            const closeModal = document.querySelector('.close-modal');
+            const taskDescription = document.getElementById('taskDescription');
+            const taskSchedule = document.getElementById('taskSchedule');
+            const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+            const createTaskBtn = document.getElementById('createTaskBtn');
+
+            let currentModule = null;
+            let currentDirectory = '';
+            let sidebarOpen = false;
+
+            // Verify GitHub connection
+            socket.emit('self:verify-connection', {}, (response) => {
+                if (response.connected) {
+                    githubStatus.innerHTML = `
+                        <span class="status-badge status-connected">Connected</span>
+                        ${response.user}/${response.repo}
+                    `;
+                    loadModules();
+                    loadTasks();
+                } else {
+                    githubStatus.innerHTML = `
+                        <span class="status-badge status-disconnected">Disconnected</span>
+                        ${response.error || 'GitHub configuration missing'}
+                    `;
+                }
+            });
+
+            // Load modules - use missions directory
+            function loadModules(directory = '') {
+                // Always use 'missions' as the base directory
+                const basePath = directory ? directory : 'missions';
+                currentDirectory = basePath;
+
+                socket.emit('self:list-modules', basePath, (response) => {
+                    if (response.success) {
+                        renderModuleList(response.files, basePath);
+                    } else {
+                        // If error is about missing directory, initialize the system
+                        if (response.error && response.error.includes('Not Found')) {
+                            moduleList.innerHTML = `<div class="self-module-item">Missions folder not found. Click Initialize to create it.</div>`;
+                        } else {
+                            moduleList.innerHTML = `<div class="self-module-item">Error: ${response.error || 'Failed to load modules'}</div>`;
+                        }
+                    }
+                });
+            }
+
+            // Load active tasks
+            function loadTasks() {
+                // Start the scheduler first if it's not running
+                socket.emit('self:start-scheduler', {}, (response) => {
+                    if (response.success) {
+                        // Now try to get tasks
+                        fetchTasksFromScheduler();
+                    } else {
+                        scheduledTaskList.innerHTML = `<div class="empty-state">Error starting scheduler: ${response.error || 'Unknown error'}. Try refreshing the page.</div>`;
+                    }
+                });
+            }
+
+            // Fetch tasks from the scheduler
+            function fetchTasksFromScheduler() {
+                socket.emit('self:get-tasks', (response) => {
+                    if (response.success && response.tasks.length > 0) {
+                        renderTaskList(response.tasks);
+
+                        // Update scheduler status
+                        document.getElementById('schedulerStatus').className = 'status-badge status-connected';
+                        document.getElementById('schedulerStatus').textContent = 'Active';
+                        document.getElementById('schedulerLastRun').textContent = `Last refresh: ${new Date().toLocaleTimeString()}`;
+                    } else {
+                        scheduledTaskList.innerHTML = '<div class="empty-state">No missions found. Create a new mission using the "New Task" button.</div>';
+                    }
+                });
+            }
+
+            // Render task list
+            function renderTaskList(tasks) {
+                if (tasks.length === 0) {
+                    scheduledTaskList.innerHTML = '<div class="empty-state">No tasks found. Create a new task using the "New Task" button.</div>';
+                    return;
+                }
+
+                let taskHtml = '';
+
+                tasks.forEach(task => {
+                    const priorityClass = task.priority === 3 ? 'task-high-priority' : 
+                                         task.priority === 2 ? 'task-medium-priority' : 'task-low-priority';
+
+                    const statusClass = task.status.toLowerCase() === 'completed' ? 'task-completed' : 
+                                        task.status.toLowerCase() === 'in progress' ? 'task-in-progress' : 
+                                        task.status.toLowerCase() === 'failed' ? 'task-failed' : 
+                                        task.status.toLowerCase() === 'cancelled' ? 'task-cancelled' : 'task-pending';
+
+                    let priorityText = 'Low';
+                    if (task.priority === 2) priorityText = 'Medium';
+                    if (task.priority === 3) priorityText = 'High';
+
+                    taskHtml += `
+                        <div class="task-item ${statusClass}" data-path="${task.path}" data-priority="${priorityText}" data-status="${task.status}">
+                            <div class="task-header">
+                                <span class="task-name">${task.name}</span>
+                                <span class="task-status">${task.status}</span>
+                            </div>
+                            <div class="task-meta">
+                                <span class="task-priority ${priorityClass}">Priority: ${priorityText}</span>
+                                <span class="task-schedule">Schedule: ${task.schedule}</span>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-sm task-view-btn" data-path="${task.path}">View</button>
+                                ${task.status === 'Pending' ? `<button class="btn btn-sm btn-accent task-execute-btn" data-path="${task.path}">Execute Now</button>` : ''}
+                                ${(task.status === 'Pending' || task.status === 'In Progress') ? 
+                                  `<button class="btn btn-sm btn-danger task-cancel-btn" data-path="${task.path}">Cancel</button>` : ''}
+                                <button class="btn btn-sm btn-danger task-delete-btn" data-path="${task.path}">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                scheduledTaskList.innerHTML = taskHtml;
+
+                // Add click listeners to task buttons
+                document.querySelectorAll('.task-view-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const path = e.currentTarget.dataset.path;
+                        if (path) viewTask(path);
+                        else console.error('No path found for task view');
+                    });
+                });
+
+                // Add click listeners to task execute buttons
+                document.querySelectorAll('.task-execute-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const path = e.currentTarget.dataset.path;
+                        if (path) executeTask(path);
+                        else console.error('No path found for task execution');
+                    });
+                });
+
+                // Add click listeners to task cancel buttons
+                document.querySelectorAll('.task-cancel-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const path = e.currentTarget.dataset.path;
+                        if (path) cancelTask(path);
+                        else console.error('No path found for task cancellation');
+                    });
+                });
+
+                // Add click listeners to task delete buttons
+                document.querySelectorAll('.task-delete-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const path = e.currentTarget.dataset.path;
+                        if (path) deleteTask(path);
+                        else console.error('No path found for task deletion');
+                    });
+                });
+            }
+
+            // Render module list
+            function renderModuleList(files, currentDir) {
+                if (files.length === 0) {
+                    moduleList.innerHTML = '<div class="self-module-item">No modules found. Click Initialize to create the architecture.</div>';
+                    return;
+                }
+
+                // Sort files - directories first, then alphabetically
+                files.sort((a, b) => {
+                    if (a.type !== b.type) {
+                        return a.type === 'dir' ? -1 : 1;
+                    }
+                    return a.name.localeCompare(b.name);
+                });
+
+                // Add back link if in subdirectory
+                let html = '';
+                if (currentDir && currentDir !== 'missions') {
+                    const parentDir = currentDir.split('/').slice(0, -1).join('/');
+                    html += `<div class="self-module-item self-folder" data-action="back" data-path="${parentDir || 'missions'}">.. (Back)</div>`;
+                }
+
+                // Add files and directories
+                files.forEach(file => {
+                    const isDir = file.type === 'dir';
+                    const cssClass = isDir ? 'self-folder' : 'self-file';
+                    const action = isDir ? 'navigate' : 'open';
+
+                    html += `<div class="self-module-item ${cssClass}" data-action="${action}" data-path="${file.path}">
+                        ${file.name}
+                    </div>`;
+                });
+
+                // Add Create New Module option at the end if we're in a directory
+                if (currentDir) {
+                    html += `<div class="self-module-item self-create-new" data-action="create-new" data-path="${currentDir}">
+                        + Create new module
+                    </div>`;
+                }
+
+                moduleList.innerHTML = html;
+
+                // Attach event listeners
+                document.querySelectorAll('.self-module-item').forEach(item => {
+                    item.addEventListener('click', handleModuleClick);
+                });
+            }
+
+            // Handle module click
+            function handleModuleClick(e) {
+                const item = e.currentTarget;
+                const action = item.dataset.action;
+                const path = item.dataset.path;
+
+                if (action === 'navigate' || action === 'back') {
+                    loadModules(path);
+                } else if (action === 'open') {
+                    openModule(path);
+                } else if (action === 'create-new') {
+                    createNewModule(path);
+                }
+            }
+
+            // Open module
+            function openModule(path) {
+                socket.emit('self:get-module', path, (response) => {
+                    if (response.success) {
+                        currentModule = {
+                            path: path,
+                            content: response.content,
+                            sha: response.sha
+                        };
+
+                        currentModulePath.textContent = path;
+                        moduleEditor.value = response.content;
+
+                        welcomeView.style.display = 'none';
+                        selfEditor.style.display = 'flex';
+
+                        // Add to activity log
+                        addActivity(`Opened module: ${path}`);
+                    } else {
+                        alert(`Error loading module: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Create new module
+            function createNewModule(directory) {
+                const moduleName = prompt('Enter module name (e.g. my_module.md):');
+                if (!moduleName) return;
+
+                // Validate filename
+                if (!moduleName.match(/^[a-zA-Z0-9_\-]+\.(md|txt|json|yml)$/)) {
+                    alert('Invalid filename. Please use only letters, numbers, underscores, and hyphens, with a valid extension (.md, .txt, .json, .yml).');
+                    return;
+                }
+
+                const modulePath = `${directory}/${moduleName}`.replace(/\/+/g, '/');
+
+                // Create an empty module
+                currentModule = {
+                    path: modulePath,
+                    content: `# ${moduleName.split('.')[0].replace(/[_-]/g, ' ')}\n\nCreated on ${new Date().toISOString()}\n\n## Purpose\n\nDescribe the purpose of this module...\n\n## Contents\n\nAdd content here...\n`,
+                    isNew: true
+                };
+
+                currentModulePath.textContent = modulePath;
+                moduleEditor.value = currentModule.content;
+
+                welcomeView.style.display = 'none';
+                selfEditor.style.display = 'flex';
+
+                // Add to activity log
+                addActivity(`Created new module: ${modulePath}`);
+            }
+
+            // Save module
+            function saveModule() {
+                if (!currentModule) return;
+
+                const content = moduleEditor.value;
+                const isNew = currentModule.isNew;
+
+                socket.emit('self:save-module', {
+                    path: currentModule.path,
+                    content: content,
+                    message: isNew ? `Create module: ${currentModule.path}` : `Update module: ${currentModule.path}`
+                }, (response) => {
+                    if (response.success) {
+                        currentModule.content = content;
+                        currentModule.isNew = false;
+                        addActivity(`${isNew ? 'Created' : 'Saved'} module: ${currentModule.path}`);
+
+                        // Refresh task list if this was a task update
+                        if (currentModule.path.includes('tasks/')) {
+                            loadTasks();
+                        }
+                    } else {
+                        alert(`Error saving module: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Cancel editing
+            function cancelEdit() {
+                if (currentModule) {
+                    welcomeView.style.display = 'block';
+                    selfEditor.style.display = 'none';
+
+                    if (!currentModule.isNew) {
+                        // Revert changes
+                        moduleEditor.value = currentModule.content;
+                    }
+
+                    currentModule = null;
+                }
+            }
+
+            // Add activity to log
+            function addActivity(text) {
+                const time = new Date().toLocaleTimeString();
+                const activityHtml = `
+                    <div class="self-activity-item">
+                        <div class="self-activity-text">${text}</div>
+                        <div class="self-activity-time">${time}</div>
+                    </div>
+                `;
+                selfActivities.innerHTML = activityHtml + selfActivities.innerHTML;
+            }
+
+            // Initialize Self architecture
+            function initializeSelf() {
+                if (!confirm('Initialize or update the System architecture on GitHub?')) return;
+
+                socket.emit('self:initialize', {}, (response) => {
+                    if (response.success) {
+                        addActivity(`Architecture initialized on GitHub (${response.created.length} modules)`);
+                        loadModules();
+                        loadTasks();
+                    } else {
+                        alert(`Error initializing architecture: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Generate memories function
+            function generateMemories() {
+                if (!confirm('Generate new memories from recent research?')) return;
+
+                socket.emit('self:generate-memories', {}, (response) => {
+                    if (response.success) {
+                        addActivity(`Memory generation task created: ${response.task}`);
+                    } else {
+                        alert(`Error creating memory generation task: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Generate research function
+            function generateResearch() {
+                const topic = prompt('Enter a research topic:');
+                if (!topic) return;
+
+                socket.emit('self:generate-research', { topic }, (response) => {
+                    if (response.success) {
+                        addActivity(`Research generation task created: ${response.task}`);
+                    } else {
+                        alert(`Error creating research task: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Show task modal
+            function showTaskModal() {
+                taskModal.style.display = 'block';
+                taskDescription.focus();
+            }
+
+            // Hide task modal
+            function hideTaskModal() {
+                taskModal.style.display = 'none';
+                taskDescription.value = '';
+            }
+
+            // Create task
+            function createTask(executeImmediately = false) {
+                const description = taskDescription.value.trim();
+                const schedule = taskSchedule.value;
+                const priority = taskPriority.value;
+
+                if (!description) {
+                    alert('Please enter a task description');
+                    return;
+                }
+
+                // For execute immediately, override the schedule
+                const taskScheduleValue = executeImmediately ? 'Now' : schedule;
+
+                socket.emit('self:create-task', {
+                    task: description,
+                    schedule: taskScheduleValue,
+                    priority: priority
+                }, (response) => {
+                    if (response.success) {
+                        addActivity(`Mission created: ${description} (${priority} priority)`);
+
+                        // Execute immediately if requested and path not provided
+                        if (executeImmediately && !response.path && response.task && response.task.path) {
+                            executeTask(response.task.path);
+                        } else if (executeImmediately && response.path) {
+                            executeTask(response.path);
+                        }
+
+                        hideTaskModal();
+                        loadTasks(); // Refresh the task list
+                    } else {
+                        alert(`Error creating mission: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Execute task immediately
+            function executeTask(taskPath) {
+                socket.emit('self:execute-task', {
+                    taskPath: taskPath
+                }, (response) => {
+                    if (response.success) {
+                        addActivity(`Task execution started: ${taskPath}`);
+                        loadTasks(); // Refresh task list to update status
+                    } else {
+                        alert(`Error executing task: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Cancel task
+            function cancelTask(taskPath) {
+                if (confirm('Are you sure you want to cancel this task?')) {
+                    socket.emit('self:cancel-task', {
+                        taskPath: taskPath
+                    }, (response) => {
+                        if (response.success) {
+                            addActivity(`Task cancelled: ${taskPath}`);
+                            loadTasks(); // Refresh task list to update status
+                        } else {
+                            alert(`Error cancelling task: ${response.error || 'Unknown error'}`);
+                        }
+                    });
+                }
+            }
+
+            // Delete task
+            function deleteTask(taskPath) {
+                if (confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
+                    socket.emit('self:delete-task', { taskPath }, (response) => {
+                        if (response.success) {
+                            addActivity(`Task deleted: ${taskPath}`);
+                            loadTasks();
+                        } else {
+                            alert(`Error deleting task: ${response.error || 'Unknown error'}`);
+                        }
+                    });
+                }
+            }
+
+            // Sync tasks with GitHub (pull then push)
+            function syncTasksWithGitHub() {
+                if (confirm('Sync tasks with GitHub? This will pull remote tasks and then push local tasks.')) {
+                    socket.emit('self:sync-tasks-with-github', (response) => {
+                        if (response.success) {
+                            addActivity(response.message || 'Tasks synchronized with GitHub');
+                            loadTasks();
+                        } else {
+                            alert(`Error syncing tasks: ${response.error || 'Unknown error'}`);
+                        }
+                    });
+                }
+            }
+
+            // Push tasks to GitHub
+            function pushTasksToGitHub() {
+                if (confirm('Push local tasks to GitHub?')) {
+                    socket.emit('self:push-tasks-to-github', (response) => {
+                        if (response.success) {
+                            addActivity(`Tasks pushed to GitHub: ${response.count} tasks`);
+                            loadTasks();
+                        } else {
+                            alert(`Error pushing tasks: ${response.error || 'Unknown error'}`);
+                        }
+                    });
+                }
+            }
+
+            // Pull tasks from GitHub
+            function pullTasksFromGitHub() {
+                if (confirm('Pull tasks from GitHub? This may overwrite local tasks.')) {
+                    socket.emit('self:pull-tasks-from-github', (response) => {
+                        if (response.success) {
+                            addActivity(`Tasks pulled from GitHub: ${response.count} tasks`);
+                            loadTasks();
+                        } else {
+                            alert(`Error pulling tasks: ${response.error || 'Unknown error'}`);
+                        }
+                    });
+                }
+            }
+
+            // Toggle scheduler (start/stop)
+            function toggleScheduler() {
+                const schedulerStatusElem = document.getElementById('schedulerStatus');
+                const isCurrentlyActive = schedulerStatusElem.textContent === 'Active';
+
+                if (isCurrentlyActive) {
+                    // Stop the scheduler
+                    socket.emit('self:stop-scheduler', {}, (response) => {
+                        if (response && response.success) {
+                            schedulerStatusElem.className = 'status-badge status-disconnected';
+                            schedulerStatusElem.textContent = 'Inactive';
+                            document.getElementById('schedulerLastRun').textContent = `Stopped: ${new Date().toLocaleTimeString()}`;
+                            document.getElementById('startSchedulerBtn').textContent = 'Start Scheduler';
+                            addActivity('Task scheduler stopped');
+                        } else {
+                            alert('Error stopping scheduler');
+                        }
+                    });
+                } else {
+                    // Start the scheduler
+                    socket.emit('self:start-scheduler', {}, (response) => {
+                        if (response && response.success) {
+                            schedulerStatusElem.className = 'status-badge status-connected';
+                            schedulerStatusElem.textContent = 'Active';
+                            document.getElementById('schedulerLastRun').textContent = `Started: ${new Date().toLocaleTimeString()}`;
+                            document.getElementById('startSchedulerBtn').textContent = 'Stop Scheduler';
+                            addActivity('Task scheduler started');
+                            // Refresh the task list to see current tasks
+                            loadTasks();
+                        } else {
+                            const errorMsg = response ? response.error : 'Unknown error';
+                            alert(`Error starting scheduler: ${errorMsg}`);
+                            // Try to initialize and restart
+                            socket.emit('self:initialize', {}, () => {
+                                setTimeout(loadTasks, 1000);
+                            });
+                        }
+                    });
+                }
+            }
+
+            // Check scheduler status periodically
+            function checkSchedulerStatus() {
+                socket.emit('self:check-scheduler-status', (response) => {
+                    if (response.success) {
+                        if (response.active) {
+                            document.getElementById('schedulerStatus').className = 'status-badge status-connected';
+                            document.getElementById('schedulerStatus').textContent = 'Active';
+                            document.getElementById('startSchedulerBtn').textContent = 'Stop Scheduler';
+                            if (response.lastRun) {
+                                document.getElementById('schedulerLastRun').textContent = `Last run: ${new Date(response.lastRun).toLocaleTimeString()}`;
+                            }
+                        } else {
+                            document.getElementById('schedulerStatus').className = 'status-badge status-disconnected';
+                            document.getElementById('schedulerStatus').textContent = 'Inactive';
+                            document.getElementById('startSchedulerBtn').textContent = 'Start Scheduler';
+                        }
+                    }
+                });
+            }
+
+            // Filter tasks
+            function filterTasks() {
+                const priorityFilter = document.getElementById('taskFilterPriority').value;
+                const statusFilter = document.getElementById('taskFilterStatus').value;
+
+                const taskItems = document.querySelectorAll('.task-item');
+
+                taskItems.forEach(item => {
+                    const priority = item.getAttribute('data-priority');
+                    const status = item.getAttribute('data-status');
+
+                    const priorityMatch = priorityFilter === 'all' || priority.toLowerCase() === priorityFilter.toLowerCase();
+                    const statusMatch = statusFilter === 'all' || status.toLowerCase() === statusFilter.toLowerCase();
+
+                    if (priorityMatch && statusMatch) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            // Show help modal
+            function showHelpModal() {
+                document.getElementById('helpModal').style.display = 'block';
+            }
+
+            // Hide help modal
+            function hideHelpModal() {
+                document.getElementById('helpModal').style.display = 'none';
+            }
+
+            // Prompt Management Functions
+            const researchPromptSelect = document.getElementById('researchPromptSelect');
+            const terminalPromptSelect = document.getElementById('terminalPromptSelect');
+            const researchPromptStatus = document.getElementById('researchPromptStatus');
+            const terminalPromptStatus = document.getElementById('terminalPromptStatus');
+            const setResearchPromptBtn = document.getElementById('setResearchPromptBtn');
+            const setTerminalPromptBtn = document.getElementById('setTerminalPromptBtn');
+            const viewResearchPromptBtn = document.getElementById('viewResearchPromptBtn');
+            const viewTerminalPromptBtn = document.getElementById('viewTerminalPromptBtn');
+            const promptViewModal = document.getElementById('promptViewModal');
+            const promptViewTitle = document.getElementById('promptViewTitle');
+            const promptViewContent = document.getElementById('promptViewContent');
+            const closePromptViewBtn = document.getElementById('closePromptViewBtn');
+
+            // Close prompt view modal
+            function closePromptView() {
+                promptViewModal.style.display = 'none';
+            }
+
+            // Show prompt view modal
+            function showPromptView(type, content) {
+                promptViewTitle.textContent = `Current ${type.charAt(0).toUpperCase() + type.slice(1)} Prompt`;
+                promptViewContent.textContent = content;
+                promptViewModal.style.display = 'block';
+            }
+
+            // Load available markdown and text files into prompt selects
+            function loadPromptFileOptions() {
+                // First, clear existing options except the default
+                while (researchPromptSelect.options.length > 1) {
+                    researchPromptSelect.remove(1);
+                }
+                while (terminalPromptSelect.options.length > 1) {
+                    terminalPromptSelect.remove(1);
+                }
+
+                // Get all MD and TXT files from the repository
+                socket.emit('self:list-modules', '', (response) => {
+                    if (response.success) {
+                        let files = response.files;
+
+                        // Filter for markdown and text files
+                        const promptFiles = files
+                            .filter(file => file.type === 'file' && (file.name.endsWith('.md') || file.name.endsWith('.txt')))
+                            .map(file => ({ path: file.path, name: file.name }));
+
+                        // Add options for directories to explore
+                        const directories = files.filter(file => file.type === 'dir');
+
+                        // Process each directory recursively
+                        directories.forEach(dir => {
+                            processDirectory(dir.path, promptFiles);
+                        });
+                    }
+                });
+            }
+
+            // Process directory recursively to find markdown and text files
+            function processDirectory(dirPath, filesList) {
+                socket.emit('self:list-modules', dirPath, (response) => {
+                    if (response.success) {
+                        // Add files to the list
+                        const files = response.files
+                            .filter(file => file.type === 'file' && (file.name.endsWith('.md') || file.name.endsWith('.txt')))
+                            .map(file => ({ path: file.path, name: `${dirPath}/${file.name}` }));
+
+                        files.forEach(file => {
+                            // Add to research prompt select
+                            const researchOption = document.createElement('option');
+                            researchOption.value = file.path;
+                            researchOption.textContent = file.path;
+                            researchPromptSelect.appendChild(researchOption);
+
+                            // Add to terminal prompt select
+                            const terminalOption = document.createElement('option');
+                            terminalOption.value = file.path;
+                            terminalOption.textContent = file.path;
+                            terminalPromptSelect.appendChild(terminalOption);
+                        });
+
+                        // Process subdirectories
+                        const directories = response.files.filter(file => file.type === 'dir');
+                        directories.forEach(dir => {
+                            processDirectory(`${dirPath}/${dir.name}`, filesList);
+                        });
+                    }
+                });
+            }
+
+            // Load current prompt configurations
+            function loadCurrentPrompts() {
+                socket.emit('self:get-prompts', (response) => {
+                    if (response.success) {
+                        const { research, terminal } = response.prompts;
+
+                        // Update Research prompt UI
+                        if (research.usingDefault) {
+                            researchPromptStatus.textContent = "Using default Research AI prompt";
+                            researchPromptSelect.value = "";
+                        } else {
+                            researchPromptStatus.textContent = `Using custom prompt: ${research.selectedPath}`;
+                            researchPromptSelect.value = research.selectedPath;
+                        }
+
+                        // Update Terminal prompt UI
+                        if (terminal.usingDefault) {
+                            terminalPromptStatus.textContent = "Using default Terminal AI prompt";
+                            terminalPromptSelect.value = "";
+                        } else {
+                            terminalPromptStatus.textContent = `Using custom prompt: ${terminal.selectedPath}`;
+                            terminalPromptSelect.value = terminal.selectedPath;
+                        }
+                    }
+                });
+            }
+
+            // Set Research prompt
+            function setResearchPrompt() {
+                const selectedPath = researchPromptSelect.value;
+                const useDefault = !selectedPath;
+
+                socket.emit('self:set-prompt', {
+                    type: 'research',
+                    path: selectedPath,
+                    useDefault
+                }, (response) => {
+                    if (response.success) {
+                        addActivity(response.message);
+                        researchPromptStatus.textContent = useDefault 
+                            ? "Using default Research AI prompt"
+                            : `Using custom prompt: ${selectedPath}`;
+                    } else {
+                        alert(`Error setting prompt: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Set Terminal prompt
+            function setTerminalPrompt() {
+                const selectedPath = terminalPromptSelect.value;
+                const useDefault = !selectedPath;
+
+                socket.emit('self:set-prompt', {
+                    type: 'terminal',
+                    path: selectedPath,
+                    useDefault
+                }, (response) => {
+                    if (response.success) {
+                        addActivity(response.message);
+                        terminalPromptStatus.textContent = useDefault 
+                            ? "Using default Terminal AI prompt"
+                            : `Using custom prompt: ${selectedPath}`;
+                    } else {
+                        alert(`Error setting prompt: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // View Research prompt
+            function viewResearchPrompt() {
+                socket.emit('self:get-prompts', (response) => {
+                    if (response.success) {
+                        const { research } = response.prompts;
+                        showPromptView('research', research.active || 'Loading default prompt...');
+
+                        // If prompt not loaded yet, request to load default
+                        if (!research.active) {
+                            socket.emit('self:load-default-prompt', { type: 'research' }, (loadResponse) => {
+                                if (loadResponse.success) {
+                                    showPromptView('research', loadResponse.prompt);
+                                }
+                            });
+                        }
+                    } else {
+                        alert(`Error viewing prompt: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // View Terminal prompt
+            function viewTerminalPrompt() {
+                socket.emit('self:get-prompts', (response) => {
+                    if (response.success) {
+                        const { terminal } = response.prompts;
+                        showPromptView('terminal', terminal.active || 'Loading default prompt...');
+
+                        // If prompt not loaded yet, request to load default
+                        if (!terminal.active) {
+                            socket.emit('self:load-default-prompt', { type: 'terminal' }, (loadResponse) => {
+                                if (loadResponse.success) {
+                                    showPromptView('terminal', loadResponse.prompt);
+                                }
+                            });
+                        }
+                    } else {
+                        alert(`Error viewing prompt: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Prompt Edit Modal Elements
+            const promptEditModal = document.getElementById('promptEditModal');
+            const promptTypeSelect = document.getElementById('promptTypeSelect');
+            const promptEditContent = document.getElementById('promptEditContent');
+            const cancelEditPromptBtn = document.getElementById('cancelEditPromptBtn');
+            const saveNewPromptBtn = document.getElementById('saveNewPromptBtn');
+            const editPromptBtn = document.getElementById('editPromptBtn');
+
+            // Current prompt being edited
+            let currentPromptType = 'research';
+
+            // Function to show prompt edit modal
+            function showPromptEditModal(type, content) {
+                promptTypeSelect.value = type;
+                promptEditContent.value = content;
+                currentPromptType = type;
+                promptViewModal.style.display = 'none';
+                promptEditModal.style.display = 'block';
+            }
+
+            // Function to close prompt edit modal
+            function closePromptEditModal() {
+                promptEditModal.style.display = 'none';
+            }
+
+            // Function to save new prompt
+            function saveNewPrompt() {
+                const type = promptTypeSelect.value;
+                const content = promptEditContent.value.trim();
+                const promptName = document.getElementById('promptNameInput').value.trim();
+
+                if (!content) {
+                    alert('Prompt content cannot be empty');
+                    return;
+                }
+
+                if (!promptName) {
+                    alert('Please provide a name for the prompt');
+                    return;
+                }
+
+                // Validate prompt name (alphanumeric, underscore, hyphen)
+                if (!promptName.match(/^[a-zA-Z0-9_-]+$/)) {
+                    alert('Prompt name should contain only letters, numbers, underscores, and hyphens');
+                    return;
+                }
+
+                socket.emit('self:save-prompt', {
+                    type,
+                    content,
+                    name: promptName
+                }, (response) => {
+                    if (response.success) {
+                        addActivity(response.message);
+                        closePromptEditModal();
+
+                        // Update prompt status display
+                        if (type === 'research') {
+                            researchPromptStatus.textContent = `Using custom prompt: ${response.path}`;
+                            researchPromptSelect.value = response.path;
+                        } else if (type === 'terminal') {
+                            terminalPromptStatus.textContent = `Using custom prompt: ${response.path}`;
+                            terminalPromptSelect.value = response.path;
+                        }
+
+                        // Refresh prompt file options
+                        loadPromptFileOptions();
+                    } else {
+                        alert(`Error saving prompt: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Event listeners for existing buttons
+            refreshBtn.addEventListener('click', () => loadModules(currentDirectory));
+            initializeBtn.addEventListener('click', initializeSelf);
+            saveModuleBtn.addEventListener('click', saveModule);
+            cancelEditBtn.addEventListener('click', cancelEdit);
+            document.getElementById('show-help').addEventListener('click', showHelpModal);
+            document.getElementById('closeHelpBtn').addEventListener('click', hideHelpModal);
+
+            // Task related buttons
+            openTaskBtn.addEventListener('click', showTaskModal);
+            generateMemoriesBtn.addEventListener('click', generateMemories);
+            generateResearchBtn.addEventListener('click', generateResearch);
+
+            // Scheduler buttons
+            const startSchedulerBtn = document.getElementById('startSchedulerBtn');
+            const refreshTasksBtn = document.getElementById('refreshTasksBtn');
+            const viewMemoriesBtn = document.getElementById('viewMemoriesBtn');
+            const syncGithubTasksBtn = document.getElementById('syncGithubTasksBtn');
+            const pushTasksBtn = document.getElementById('pushTasksBtn');
+            const pullTasksBtn = document.getElementById('pullTasksBtn');
+            const checkGithubConnectionBtn = document.getElementById('checkGithubConnectionBtn');
+
+            startSchedulerBtn.addEventListener('click', toggleScheduler);
+            refreshTasksBtn.addEventListener('click', loadTasks);
+
+            // GitHub sync buttons
+            syncGithubTasksBtn.addEventListener('click', syncTasksWithGitHub);
+            pushTasksBtn.addEventListener('click', pushTasksToGitHub);
+            pullTasksBtn.addEventListener('click', pullTasksFromGitHub);
+
+            // Check Github Connection Button
+            checkGithubConnectionBtn.addEventListener('click', () => {
+                socket.emit('self:verify-connection', {}, (response) => {
+                    if (response.connected) {
+                        githubStatus.innerHTML = `
+                            <span class="status-badge status-connected">Connected</span>
+                            ${response.user}/${response.repo}
+                        `;
+                        addActivity('GitHub connection verified');
+                    } else {
+                        githubStatus.innerHTML = `
+                            <span class="status-badge status-disconnected">Disconnected</span>
+                            ${response.error || 'GitHub configuration missing'}
+                        `;
+                        addActivity('GitHub connection failed');
+                    }
+                });
+            });
+
+            // Filter selectors
+            const taskFilterPriority = document.getElementById('taskFilterPriority');
+            const taskFilterStatus = document.getElementById('taskFilterStatus');
+
+            taskFilterPriority.addEventListener('change', filterTasks);
+            taskFilterStatus.addEventListener('change', filterTasks);
+
+            // Task modal listeners
+            document.querySelectorAll('.close-modal').forEach(elem => {
+                elem.addEventListener('click', hideTaskModal);
+            });
+            cancelTaskBtn.addEventListener('click', hideTaskModal);
+            createTaskBtn.addEventListener('click', () => createTask(false));
+
+            // Add execute now button listener
+            const executeNowBtn = document.getElementById('executeNowBtn');
+            executeNowBtn.addEventListener('click', () => createTask(true));
+
+            // View memories
+            viewMemoriesBtn.addEventListener('click', () => {
+                window.location.href = '/memory';
+            });
+
+            // Prompt management listeners
+            setResearchPromptBtn.addEventListener('click', setResearchPrompt);
+            setTerminalPromptBtn.addEventListener('click', setTerminalPrompt);
+            viewResearchPromptBtn.addEventListener('click', viewResearchPrompt);
+            viewTerminalPromptBtn.addEventListener('click', viewTerminalPrompt);
+            closePromptViewBtn.addEventListener('click', closePromptView);
+            editPromptBtn.addEventListener('click', () => {
+                // Get currently viewed prompt
+                const title = promptViewTitle.textContent;
+                const type = title.toLowerCase().includes('research') ? 'research' : 'terminal';
+                const content = promptViewContent.textContent;
+                showPromptEditModal(type, content);
+            });
+
+            // Edit modal listeners
+            cancelEditPromptBtn.addEventListener('click', closePromptEditModal);
+            saveNewPromptBtn.addEventListener('click', saveNewPrompt);
+
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === promptViewModal) {
+                    closePromptView();
+                }
+                if (e.target === promptEditModal) {
+                    closePromptEditModal();
+                }
+                if (e.target === taskModal) {
+                    hideTaskModal();
+                }
+                if (e.target === document.getElementById('helpModal')) {
+                    hideHelpModal();
+                }
+            });
+
+            // Initialize
+            loadPromptFileOptions();
+            loadCurrentPrompts();
+
+            // Check scheduler status immediately and then every 30 seconds
+            checkSchedulerStatus();
+            setInterval(checkSchedulerStatus, 30000);
+
+            // Listen for self:activity events
+            socket.on('self:activity', (data) => {
+                addActivity(data.text);
+            });
+
+            // View task
+            function viewTask(path) {
+                socket.emit('self:view-task', { taskPath: path }, (response) => {
+                    if (response.success) {
+                        currentModule = {
+                            path: path,
+                            content: response.content,
+                            sha: response.sha || ''
+                        };
+
+                        currentModulePath.textContent = path;
+                        moduleEditor.value = response.content;
+
+                        welcomeView.style.display = 'none';
+                        selfEditor.style.display = 'flex';
+
+                        // Add to activity log
+                        addActivity(`Viewed task: ${path}`);
+                    } else {
+                        alert(`Error viewing task: ${response.error || 'Unknown error'}`);
+                    }
+                });
+            }
+
+            // Delete task
+            function deleteTask(path) {
+                if (confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
+                    socket.emit('self:delete-task', { taskPath: path }, (response) => {
+                        if (response.success) {
+                            addActivity(`Task deleted: ${path}`);
+                            loadTasks();
+                        } else {
+                            alert(`Error deleting task: ${response.error || 'Unknown error'}`);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
