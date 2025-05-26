@@ -2,6 +2,15 @@
 
 A powerful AI-driven research assistant platform that helps you explore topics deeply, maintain a memory system, and automate research tasks.
 
+![image](https://github.com/user-attachments/assets/3f433bf3-1286-4f91-89cd-20141f6a164a)
+
+![image](https://github.com/user-attachments/assets/d17b3b49-02e3-4270-8bd2-5d3f4ec9b79f)
+![image](https://github.com/user-attachments/assets/50c9839f-69a5-482f-be40-d68c2c48eac3)
+![image](https://github.com/user-attachments/assets/bc89d8a2-f221-4bfb-82dd-9994d7c30882)
+![image](https://github.com/user-attachments/assets/47f284cc-9dbe-4550-9ac6-ca3b22bd8514)
+
+
+
 ## Overview
 
 The COREAI Research System is an integrated platform that combines AI-powered research capabilities with memory management and task automation. It enables users to conduct deep, multi-layered research on any topic, store findings, and schedule automated research missions.
