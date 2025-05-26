@@ -3,6 +3,7 @@
 A powerful AI-driven research assistant platform that helps you explore topics deeply, maintain a memory system, and automate research tasks.
 
 ![image](https://github.com/user-attachments/assets/3f433bf3-1286-4f91-89cd-20141f6a164a)
+![Screenshot 2025-03-01 234656](https://github.com/user-attachments/assets/31e87705-945e-463b-ad66-f9abb4781751)
 
 ![image](https://github.com/user-attachments/assets/d17b3b49-02e3-4270-8bd2-5d3f4ec9b79f)
 ![image](https://github.com/user-attachments/assets/50c9839f-69a5-482f-be40-d68c2c48eac3)
